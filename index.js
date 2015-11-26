@@ -7,6 +7,9 @@ module.exports = {
   name: 'ember-cli-sigma',
 
   included: function(app) {
+    this._super.included(app);
+    var sigmaJsOpts = app.options.sigmajs || {};
+
     var sigmaDir = app.bowerDirectory + '/sigma/';
 
     // Core:
@@ -56,5 +59,25 @@ module.exports = {
     app.import(sigmaDir + 'src/misc/sigma.misc.animation.js');
     app.import(sigmaDir + 'src/misc/sigma.misc.bindEvents.js');
     app.import(sigmaDir + 'src/misc/sigma.misc.drawHovers.js');
+
+    //
+    // Options:
+    //
+    // For example:
+    // var app = new EmberApp(defaults, {
+    //   sigmajs: {
+    //     JSONparser: true,
+    //     forceAtlasLayout: true
+    //   }
+    // });
+
+    if (sigmaJsOpts.JSONparser) {
+      app.import(sigmaDir + 'plugins/sigma.parsers.json/sigma.parsers.json.js');
+    }
+
+    if (sigmaJsOpts.forceAtlasLayout) {
+      app.import(sigmaDir + 'plugins/sigma.layout.forceAtlas2/worker.js');
+      app.import(sigmaDir + 'plugins/sigma.layout.forceAtlas2/supervisor.js');
+    }
   }
 };
